@@ -8,14 +8,17 @@ public class Player_Controller : MonoBehaviour
     public float move_Speed;
     public CharacterController character_Con;
     public Vector3 movePoint;
-    public Camera mainCamera;
+
+    private RaycastHit rayHit;
+
+    public bool isMove = false;
+
     // Start is called before the first frame update
 
     private void Awake()
     {
         TryGetComponent(out player_Anim);
         TryGetComponent(out character_Con);
-        mainCamera = Camera.main;
     }
     void Start()
     {
@@ -25,30 +28,36 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (!isMove) return;
+
+        Debug.DrawRay(transform.position, -transform.up, Color.green, 3f);
+
+        if (Physics.Raycast(transform.position, -transform.up, out rayHit, 3f, LayerMask.GetMask("Node")))
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            GameObject node_Obj = rayHit.collider.gameObject;
+            Node node = node_Obj.GetComponent<Node>();
 
-            Debug.DrawRay(ray.origin, ray.direction * 10f, Color.green);
-
-            if (Physics.Raycast(ray, out RaycastHit rayCastHit))
+            if (node == null) return;
+            else
             {
-                movePoint = rayCastHit.point;
-               //Debug.Log("MovePoint | " + movePoint.ToString());
-               //Debug.Log("¸ÂÀº °´Ã¼ | " + rayCastHit.ToString());
+                node.isStart = true;
+                NodeManager.Instance.isRayStart = true;
+                NodeManager.Instance.start_Node = node;
             }
         }
-  
 
-        if(Vector3.Distance(transform.position, movePoint) > 0.1f)
-        {
-            Player_Move();
-            player_Anim.SetBool("isMove", true);
-        }
-        else
-        {
-            player_Anim.SetBool("isMove", false);
-        }
+      
+           // if (Vector3.Distance(transform.position, movePoint) > 0.1f)
+           // {
+           //     Player_Move();
+           //     player_Anim.SetBool("isMove", true);
+           // }
+           // else
+           // {
+           //     player_Anim.SetBool("isMove", false);
+           //     NodeManager.Instance.isRay = false;
+           // }
+        
     }
     public void Player_Move()
     {
@@ -60,5 +69,15 @@ public class Player_Controller : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(update_MovePoint);
 
         character_Con.SimpleMove(update_MovePoint);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Node") || collision.gameObject.CompareTag("FirstNode"))
+        {
+            Node node = collision.gameObject.GetComponent<Node>();
+
+            node.isStart = false;
+        }
     }
 }
