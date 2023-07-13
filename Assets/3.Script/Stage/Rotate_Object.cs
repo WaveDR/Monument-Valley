@@ -17,6 +17,7 @@ public class Rotate_Object : MonoBehaviour
     [SerializeField] Player_Controller player;
 
     private bool isRotate;
+    private float deltaTime;
 
     // Start is called before the first frame update
     void Awake()
@@ -24,7 +25,7 @@ public class Rotate_Object : MonoBehaviour
         child_Nodes = GetComponentsInChildren<Node>();
         player = FindObjectOfType<Player_Controller>();
 
-        foreach(Node nodes in child_Nodes)
+        foreach (Node nodes in child_Nodes)
         {
             nodes.isRotate_Node = true;
         }
@@ -36,7 +37,25 @@ public class Rotate_Object : MonoBehaviour
 
         if (isRotate)
         {
-            Rotate_Co(false, 0, 0, rotate_Type);
+            offset = (Input.mousePosition - mousePos);
+
+
+            switch (rotate_Type)
+            {
+                case ERotate.RotX:
+                    rotation.x = -(offset.x + offset.y) * Time.deltaTime * rotate_Speed;
+                    break;
+                case ERotate.RotY:
+                    rotation.y = -(offset.x + offset.y) * Time.deltaTime * rotate_Speed;
+                    break;
+                case ERotate.RotZ:
+                    rotation.z = -(offset.x + offset.y) * Time.deltaTime * rotate_Speed;
+                    break;
+            }
+
+            transform.Rotate(rotation);
+
+            mousePos = Input.mousePosition;
         }
         else
         {
@@ -58,67 +77,27 @@ public class Rotate_Object : MonoBehaviour
         float cur_Angle = Current_Rotate(rotate_Type);
         float target_Angle;
 
-        //필요 각도 색인
-        for (int i = 270; i >= 0 ; i-= 90)
+        for (int i = 270; i >= 0; i -= 90)
         {
-            if(cur_Angle > i)
+            if (cur_Angle > i)
             {
-                if(cur_Angle > i+ 45)
+                if (cur_Angle > i + 45)
                 {
-                    target_Angle= i + 90;
+                    target_Angle = i + 90;
                 }
                 else
                 {
                     target_Angle = i;
                 }
-
-                break;
+                Debug.Log(target_Angle);
+                Auto_Euler(cur_Angle, target_Angle);
             }
         }
     }
 
-    IEnumerator Rotate_Co(bool auto, float start, float end, ERotate rotate_Type)
-    {
-        // Vector3 target = new Vector3(end, 0, 0);
-        float rotation_Idx = 0;
-      
-
-        if (!auto)
-        {
-            offset = (Input.mousePosition - mousePos);
-
-
-            rotation_Idx = -(offset.x + offset.y) * Time.deltaTime * rotate_Speed;
-
-            transform.Rotate(rotation);
-
-            mousePos = Input.mousePosition;
-        }
-        else
-        {
-            yield return new WaitForSeconds(0.5f);
-
-        }
-
-        switch (rotate_Type)
-        {
-            case ERotate.RotX:
-                rotation.x = rotation_Idx;
-                break;
-
-            case ERotate.RotY:
-                rotation.y = rotation_Idx;
-                break;
-
-            case ERotate.RotZ:
-                rotation.z = rotation_Idx;
-
-                break;
-        }
-    }
     public float Current_Rotate(ERotate rotate)
     {
-        Quaternion current_Euler = transform.localRotation;
+        Vector3 current_Euler = transform.eulerAngles;
 
         switch (rotate)
         {
@@ -130,5 +109,11 @@ public class Rotate_Object : MonoBehaviour
                 return current_Euler.z;
         }
         return 0f;
+    }
+
+    void Auto_Euler(float start, float end)
+    {
+        if (transform.localRotation.x < end)
+        transform.localRotation = Quaternion.Euler(start + Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
     }
 }
