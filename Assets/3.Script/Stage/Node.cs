@@ -32,10 +32,7 @@ public class Node : MonoBehaviour
     {
         NodeManager.Instance.all_Nodes.Add(gameObject.GetComponent<Node>());
         range = 1f;
-        if (!isRotate_Node)
-        {
             isTarget_Node = true;
-        }
     }
 
     // Update is called once per frame
@@ -90,6 +87,12 @@ public class Node : MonoBehaviour
         }
         else
         {
+            if (crossRoad) //갈림길 기준으로 더 이상 갈곳이 없으면
+            {
+                Debug.Log("더 이상 길이 없습니다!" + gameObject.name);
+                return;
+            }
+
             //막힌 곳으로 판단
             Debug.Log("길이 막혔습니다! " + gameObject.name);
             isDont_Able = true;

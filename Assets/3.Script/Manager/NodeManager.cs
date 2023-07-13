@@ -10,7 +10,6 @@ public class NodeManager : MonoBehaviour
     public List<Node> all_Nodes = new List<Node>();
 
     public Camera mainCamera;
-    public Node ableSet_Node;
     public Node start_Node;
     public Node end_Node;
 
@@ -19,10 +18,7 @@ public class NodeManager : MonoBehaviour
     public bool isClick;
     public bool isRayStart;
     public bool isRayEnd;
-
-    private bool isScaning;
     private bool isRay;
-    private int _scanNum;
 
     private void Awake()
     {
@@ -36,19 +32,16 @@ public class NodeManager : MonoBehaviour
             Destroy(gameObject);
         }
         player = FindObjectOfType<Player_Controller>();
-        ableSet_Node = GameObject.FindGameObjectWithTag("FirstNode").GetComponent<Node>();
         mainCamera = Camera.main;
     }
+
     private void Start()
     {
-        ableSet_Node.isNode = true;
+        
     }
-
     void Update()
     {
         Input_System();
-
-
 
         if (!isRay)
         {
