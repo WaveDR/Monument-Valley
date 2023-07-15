@@ -17,28 +17,31 @@ public class Rotate_Object : MonoBehaviour
     [SerializeField] Player_Controller player;
 
     private bool isRotate;
-    private float deltaTime;
+
+    private bool isCurrect;
+    public bool isControl = true;
+    public Animator rotator_Anim;
 
     // Start is called before the first frame update
     void Awake()
     {
         child_Nodes = GetComponentsInChildren<Node>();
         player = FindObjectOfType<Player_Controller>();
-
+        TryGetComponent(out rotator_Anim);
         foreach (Node nodes in child_Nodes)
         {
-            nodes.isRotate_Node = true;
+            nodes.rotate_Node = true;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (isRotate)
+        if (!isControl) return;
+        if (isRotate) 
         {
             offset = (Input.mousePosition - mousePos);
-
+            isCurrect = false;
 
             switch (rotate_Type)
             {
@@ -57,8 +60,11 @@ public class Rotate_Object : MonoBehaviour
 
             mousePos = Input.mousePosition;
         }
+        
+
         else
         {
+            if(!isCurrect)
             Auto_Rotate_Euler();
         }
     }
@@ -113,7 +119,16 @@ public class Rotate_Object : MonoBehaviour
 
     void Auto_Euler(float start, float end)
     {
-        if (transform.localRotation.x < end)
-        transform.localRotation = Quaternion.Euler(start + Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+        
+        if ((int)transform.localRotation.x != (int)end) 
+            transform.localEulerAngles = new Vector3(start + Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+        else
+        {
+            transform.localEulerAngles = new Vector3(start - Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
+     
+        }
+
+        if(transform.localEulerAngles.x >= end - 0.3f && transform.localEulerAngles.x <= end + 0.3f) isCurrect = true;
+
     }
 }

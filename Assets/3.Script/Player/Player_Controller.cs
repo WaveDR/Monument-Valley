@@ -1,24 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Player_Controller : MonoBehaviour
 {
     public Animator player_Anim;
     public float move_Speed;
-    public CharacterController character_Con;
-    public Vector3 movePoint;
-
-    private RaycastHit rayHit;
+    public GameObject node_Obj;
 
     public bool isMove = false;
 
+    public Queue<Node> move_Tatget_Queue = new Queue<Node>();
+    public List<Node> move_Target_List = new List<Node>();
+    RaycastHit hit;
     // Start is called before the first frame update
 
     private void Awake()
     {
         TryGetComponent(out player_Anim);
-        TryGetComponent(out character_Con);
     }
     void Start()
     {
@@ -28,56 +28,86 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isMove) return;
+        move_Target_List = move_Tatget_Queue.ToList();
 
-        Debug.DrawRay(transform.position, -transform.up, Color.green, 3f);
-
-        if (Physics.Raycast(transform.position, -transform.up, out rayHit, 3f, LayerMask.GetMask("Node")))
+        if (!isMove)
         {
-            GameObject node_Obj = rayHit.collider.gameObject;
-            Node node = node_Obj.GetComponent<Node>();
-
-            if (node == null) return;
-            else
-            {
-                node.isStart = true;
-                NodeManager.Instance.isRayStart = true;
-                NodeManager.Instance.start_Node = node;
-            }
+            player_Anim.SetBool("isMove", false);
         }
 
-      
-           // if (Vector3.Distance(transform.position, movePoint) > 0.1f)
-           // {
-           //     Player_Move();
-           //     player_Anim.SetBool("isMove", true);
-           // }
-           // else
-           // {
-           //     player_Anim.SetBool("isMove", false);
-           //     NodeManager.Instance.isRay = false;
-           // }
-        
+        if(move_Tatget_Queue.Count >0)
+        {
+            Player_Move();
+            player_Anim.SetBool("isMove", true);
+        }
+
+        Debug.DrawRay(transform.position, Vector3.down * 1f, Color.green);
+
     }
     public void Player_Move()
     {
-        Vector3 update_MovePoint = (movePoint - transform.position).normalized * move_Speed;
+         transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
-        transform.LookAt(transform.position + (movePoint - transform.position));
 
-        update_MovePoint.y = 0;
-        transform.rotation = Quaternion.LookRotation(update_MovePoint);
-
-        character_Con.SimpleMove(update_MovePoint);
+        transform.LookAt(move_Tatget_Queue.Peek().transform.position);
+        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
+        if (transform.position == move_Tatget_Queue.Peek().transform.position)
+        {
+            move_Tatget_Queue.Dequeue();
+        }
+        if (move_Tatget_Queue.Count == 0)
+        {
+            isMove = false;
+            return;
+        }
+        //character_Con.SimpleMove(update_MovePoint);
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Node") || collision.gameObject.CompareTag("FirstNode"))
+        if (other.CompareTag("Node"))
         {
-            Node node = collision.gameObject.GetComponent<Node>();
+            Debug.Log("인식시작");
+            Node node = other.GetComponent<Node>();
+            node_Obj = node.gameObject;
+            if (node == null) return;
+            else
+            {
+                NodeManager.Instance.start_Node = node;
+                NodeManager.Instance.isRayStart = true;
+                node.isStart = true;
+            }
 
+            if (node.stairs_Node)
+            {
+                transform.localRotation = Quaternion.Euler(Vector3.zero);
+            }
+            else
+            {
+                transform.localRotation = Quaternion.Euler(Vector3.zero);
+            }
+        }
+        if (other.CompareTag("Rotator"))
+        {
+            Rotate_Object rotator = other.GetComponent<Rotate_Object>();
+            rotator.rotator_Anim.SetBool("Player_On", true);
+            rotator.isControl = false;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Node"))
+        {
+            Node node = other.GetComponent<Node>();
             node.isStart = false;
+        }
+
+        if (other.CompareTag("Rotator"))
+        {
+            Rotate_Object rotator = other.GetComponent<Rotate_Object>();
+            rotator.rotator_Anim.SetBool("Player_On", false);
+            rotator.isControl = true;
+
         }
     }
 }

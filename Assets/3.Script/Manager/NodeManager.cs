@@ -18,7 +18,7 @@ public class NodeManager : MonoBehaviour
     public bool isClick;
     public bool isRayStart;
     public bool isRayEnd;
-    private bool isRay;
+    public bool isRay;
 
     private void Awake()
     {
@@ -49,21 +49,15 @@ public class NodeManager : MonoBehaviour
             {
                 start_Node.isNode = true;
                 isRay = true;
+                
             }
         }
 
         if (isClick)
         {
-
             Reset_TargetNode();
-            foreach (Node nodes in all_Nodes)
-            {
-                nodes.Reset_Field();
-            }
+
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-
-            Debug.DrawRay(ray.origin, ray.direction * 10f, Color.green);
-
             if (Physics.Raycast(ray, out RaycastHit rayCastHit))
             {
                 GameObject node_Obj = rayCastHit.collider.gameObject;
@@ -76,23 +70,25 @@ public class NodeManager : MonoBehaviour
                     node.isEnd = true;
                     end_Node = node;
                     isRayEnd = true;
-                    //movePoint = rayCastHit.point;
                 }
-                //Debug.Log("MovePoint | " + movePoint.ToString());
-                //Debug.Log("¸ÂÀº °´Ã¼ | " + rayCastHit.ToString());
             }
-
         }
     }
     public void Reset_TargetNode()
     {
         targetList.Clear();
+        player.move_Tatget_Queue.Clear();
         foreach (Node nodes in all_Nodes)
         {
-            nodes.isDont_Able = false;
             nodes.isPast_Node = false;
+            nodes.isDont_Able = false;
+            nodes.isStart = false;
+            nodes.isEnd = false;
+            //start_Node = null;
+            end_Node = null;
         }
         isRayEnd = false;
+
     }
 
     public void Delete_Node_Index()
@@ -115,6 +111,19 @@ public class NodeManager : MonoBehaviour
         }
     }
 
+    public void Export_Target_List()
+    {
+        while (true)
+        {
+            player.move_Tatget_Queue.Enqueue(targetList[0]);
+            targetList.RemoveAt(0);
+            if (targetList.Count <= 0)
+            {
+                player.isMove = true;
+                return;
+            }
+        }
+    }
     
     void Input_System()
     {
