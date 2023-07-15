@@ -48,7 +48,6 @@ public class Player_Controller : MonoBehaviour
     {
          transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
-
         transform.LookAt(move_Tatget_Queue.Peek().transform.position);
         transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
         if (transform.position == move_Tatget_Queue.Peek().transform.position)
