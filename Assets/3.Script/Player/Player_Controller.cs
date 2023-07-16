@@ -46,10 +46,15 @@ public class Player_Controller : MonoBehaviour
     }
     public void Player_Move()
     {
-         transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
-        transform.LookAt(move_Tatget_Queue.Peek().transform.position);
-        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
+        if(move_Tatget_Queue.Peek().ladder_Node)
+            player_Anim.SetBool("isLadder", true);
+        else
+            player_Anim.SetBool("isLadder", false);
+
+     
+
         if (transform.position == move_Tatget_Queue.Peek().transform.position)
         {
             move_Tatget_Queue.Dequeue();
@@ -59,6 +64,9 @@ public class Player_Controller : MonoBehaviour
             isMove = false;
             return;
         }
+
+        transform.LookAt(move_Tatget_Queue.Peek().transform.position);
+        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
         //character_Con.SimpleMove(update_MovePoint);
     }
 
@@ -76,7 +84,6 @@ public class Player_Controller : MonoBehaviour
                 NodeManager.Instance.isRayStart = true;
                 node.isStart = true;
             }
-
             if (node.stairs_Node)
             {
                 transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -92,6 +99,11 @@ public class Player_Controller : MonoBehaviour
             rotator.rotator_Anim.SetBool("Player_On", true);
             rotator.isControl = false;
         }
+        if (other.CompareTag("Fillor"))
+        {
+            transform.SetParent(other.transform);
+            //todo 드래그 오브젝트 위로 올라갓을 경우 캐릭터 부모오브젝트 변경
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -106,7 +118,13 @@ public class Player_Controller : MonoBehaviour
             Rotate_Object rotator = other.GetComponent<Rotate_Object>();
             rotator.rotator_Anim.SetBool("Player_On", false);
             rotator.isControl = true;
-
         }
+
+        if (other.CompareTag("Fillor"))
+        {
+            transform.SetParent(null);
+            //todo 드래그 오브젝트 위로 올라갓을 경우 캐릭터 부모오브젝트 변경
+        }
+
     }
 }

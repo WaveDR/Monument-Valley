@@ -21,6 +21,7 @@ public class Node : MonoBehaviour
     public bool crossRoad;
     public bool rotate_Node;
     public bool stairs_Node;
+    public bool ladder_Node;
 
     [Header("Data Node")]
     [Header("=======================================")]
@@ -40,17 +41,21 @@ public class Node : MonoBehaviour
     void Update()
     {
 
-        if (!stairs_Node)
-            Test_DrawRay(0, 1);
+        if (stairs_Node)
+            Test_DrawRay(1f, 5, ladder_Node);
+        else if (ladder_Node)
+            Test_DrawRay(0, 5, ladder_Node);
         else
-            Test_DrawRay(1f, 5);
+            Test_DrawRay(0, 1, ladder_Node);
 
         if (isNode)
         {
-            if (!stairs_Node)
-              Raycast_Node(0, 1);
+            if (stairs_Node)
+                Raycast_Node(1f, 5);
+            else if (ladder_Node)
+                Raycast_Node(0f, 5f);
             else
-              Raycast_Node(1f, 5);
+                Raycast_Node(0, 1);
 
             isNode = false;
         }
@@ -63,17 +68,17 @@ public class Node : MonoBehaviour
         }
     }
 
-    public void Raycast_Node(float rayDeg, int rayLength)
+    public void Raycast_Node(float rayDeg, float rayLength)
     { 
-        if ((Physics.Raycast(transform.position+ (transform.forward * rayDeg / 2)   , transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node"))  && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able) )
-         || (Physics.Raycast(transform.position+ (transform.right * rayDeg /2)      , transform.right + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node"))    && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able) )
-         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg / 2) , -transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able) )
-         || (Physics.Raycast(transform.position+ (-transform.right * rayDeg / 2)    , -transform.right + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node"))   && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able) ))
+        if ((Physics.Raycast(transform.position+ (  transform.forward * rayDeg) ,  transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (  transform.right * rayDeg)   ,  transform.right   + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg) , -transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (- transform.right * rayDeg)   , -transform.right   + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position,  transform.up, out rayHit, range * rayLength, LayerMask.GetMask("Node"))  && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able)))
         {
             isTarget_Node = true;
             isPast_Node = true;
-            // 북 동 남 서 방향을 확인하여 isPast_Node의 상태 확인
-            if(!stairs_Node)
+            //북 동 남 서 방향을 확인하여 isPast_Node의 상태 확인
             neighbor_Node = rayHit.collider.GetComponent<Node>();
             if(neighbor_Node != null)
             {
@@ -110,11 +115,12 @@ public class Node : MonoBehaviour
             NodeManager.Instance.Delete_Node_Index();
         }
     }
-    void Test_DrawRay(float rayDeg ,int rayLength)
+    void Test_DrawRay(float rayDeg , float rayLength , bool ladder)
     {
-        Debug.DrawRay(transform.position + (transform.forward * rayDeg / 2), (transform.forward + (Vector3.up * rayDeg ) )* range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + (-transform.forward * rayDeg / 2), (-transform.forward + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + (transform.right * rayDeg / 2), (transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + (-transform.right * rayDeg / 2), (-transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + ( transform.forward * rayDeg), (transform.forward + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position, transform.up * range * rayLength, Color.green);
     }
 }

@@ -7,6 +7,7 @@ TagManager:
   - Node
   - FirstNode
   - Rotator
+  - Fillor
   layers:
   - Default
   - TransparentFX
