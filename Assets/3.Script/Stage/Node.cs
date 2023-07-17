@@ -22,17 +22,22 @@ public class Node : MonoBehaviour
     public bool rotate_Node;
     public bool stairs_Node;
     public bool ladder_Node;
+    public bool button_Node;
 
     [Header("Data Node")]
     [Header("=======================================")]
     public Node neighbor_Node;
     [SerializeField] private float range;
+    [SerializeField] private int stage_Anim_Num;
+
+    public Animator stage_Anim;
     RaycastHit rayHit;
 
     // Start is called before the first frame update
     void Start()
     {
         NodeManager.Instance.all_Nodes.Add(gameObject.GetComponent<Node>());
+        stage_Anim = GetComponentInParent<Animator>();
         range = 1f;
         isTarget_Node = true;
     }
@@ -122,5 +127,17 @@ public class Node : MonoBehaviour
         Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
         Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
         Debug.DrawRay(transform.position, transform.up * range * rayLength, Color.green);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (button_Node)
+            {
+                stage_Anim.SetBool("Floor_Out", true);
+
+                if(stairs_Node) stage_Anim.SetBool("Ladder_On", true);
+            }
+        }
     }
 }
