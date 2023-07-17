@@ -46,6 +46,8 @@ public class Player_Controller : MonoBehaviour
     }
     public void Player_Move()
     {
+        transform.LookAt(move_Tatget_Queue.Peek().transform.position);
+        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
         transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
         if(move_Tatget_Queue.Peek().ladder_Node)
@@ -54,6 +56,7 @@ public class Player_Controller : MonoBehaviour
             player_Anim.SetBool("isLadder", false);
 
      
+        
 
         if (transform.position == move_Tatget_Queue.Peek().transform.position)
         {
@@ -65,8 +68,7 @@ public class Player_Controller : MonoBehaviour
             return;
         }
 
-        transform.LookAt(move_Tatget_Queue.Peek().transform.position);
-        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
+  
         //character_Con.SimpleMove(update_MovePoint);
     }
 

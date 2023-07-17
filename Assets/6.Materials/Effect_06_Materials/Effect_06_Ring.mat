@@ -4,8 +4,9 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Effect_06_Ring
   m_Shader: {fileID: 4800000, guid: c08b0de36275f4039875d1aab188d0ca, type: 3}
   m_ShaderKeywords: IS_TEXTUREBLEND
@@ -87,4 +88,5 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _TintColor: {r: 0.75, g: 1.5103451, b: 3, a: 1}
+    - _TintColor: {r: 3.9201572, g: 4.0052357, b: 1.3791612, a: 1}
+  m_BuildTextureStacks: []

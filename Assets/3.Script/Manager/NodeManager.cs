@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NodeManager : MonoBehaviour
 {
@@ -129,5 +130,16 @@ public class NodeManager : MonoBehaviour
     void Input_System()
     {
         isClick = Input.GetMouseButtonDown(0);
+    }
+
+    public void Finish_Stage()
+    {
+        Debug.LogError("°ñ µµÂø!");
+        UI_Manager.Instance.ui_Anim.SetTrigger("Fade");
+        Invoke("Goto_Lobby", 0.8f);
+    }
+    void Goto_Lobby()
+    {
+        SceneManager.LoadScene("Lobby");
     }
 }

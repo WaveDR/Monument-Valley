@@ -23,6 +23,7 @@ public class Node : MonoBehaviour
     public bool stairs_Node;
     public bool ladder_Node;
     public bool button_Node;
+    public bool goal_Node;
 
     [Header("Data Node")]
     [Header("=======================================")]
@@ -137,6 +138,10 @@ public class Node : MonoBehaviour
                 stage_Anim.SetBool("Floor_Out", true);
 
                 if(stairs_Node) stage_Anim.SetBool("Ladder_On", true);
+            }
+            if (goal_Node)
+            {
+                NodeManager.Instance.Finish_Stage();
             }
         }
     }
