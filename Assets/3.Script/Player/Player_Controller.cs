@@ -125,6 +125,5 @@ public class Player_Controller : MonoBehaviour
             transform.SetParent(null);
             //todo 드래그 오브젝트 위로 올라갓을 경우 캐릭터 부모오브젝트 변경
         }
-
     }
 }
