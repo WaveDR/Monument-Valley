@@ -22,6 +22,8 @@ public class Rotate_Object : MonoBehaviour
     public bool isControl = true;
     public Animator rotator_Anim;
 
+    public GameObject light_Object;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -78,6 +80,15 @@ public class Rotate_Object : MonoBehaviour
     {
         isRotate = false;
     }
+    //private void OnMouseOver()
+    //{
+    //    light_Object.SetActive(true);
+    //    light_Object.transform.localPosition = Input.mousePosition * Time.deltaTime * 5;
+    //}
+    //private void OnMouseExit()
+    //{
+    //    light_Object.SetActive(false);
+    //}
     public void Auto_Rotate_Euler()
     {
         float cur_Angle = Current_Rotate(rotate_Type);

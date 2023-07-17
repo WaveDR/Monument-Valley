@@ -29,7 +29,7 @@ public class Node : MonoBehaviour
     public Node neighbor_Node;
     [SerializeField] private float range;
     [SerializeField] private int stage_Anim_Num;
-
+    public ParticleSystem click_Pos;
     public Animator stage_Anim;
     RaycastHit rayHit;
 

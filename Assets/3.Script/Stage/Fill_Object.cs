@@ -10,19 +10,12 @@ public class Fill_Object : MonoBehaviour
 
     public float min_PosY;
     public float max_PosY;
-    
-
     float Object_Cur_Pos(float transformY)
     {
         float object_PosY = transformY;
         double round_Y = Math.Round(object_PosY,2); //맞춰야할 0.0n 위치
-
         float round_To_Float = (float)round_Y;
-
-       float clamp_Round = Mathf.Clamp(round_To_Float, min_PosY, max_PosY);
-
-        Debug.Log(clamp_Round);
-
+        float clamp_Round = Mathf.Clamp(round_To_Float, min_PosY, max_PosY);
         return clamp_Round;
     }
     void OnMouseDown()

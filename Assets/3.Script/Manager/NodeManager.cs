@@ -68,6 +68,7 @@ public class NodeManager : MonoBehaviour
                 {
                     isRay = false;
                     node.isEnd = true;
+                    node.click_Pos.Play();
                     end_Node = node;
                     isRayEnd = true;
                 }
