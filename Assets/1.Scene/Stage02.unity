@@ -3004,7 +3004,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1069142660}
   - component: {fileID: 1069142662}
-  - component: {fileID: 1069142661}
   m_Layer: 0
   m_Name: Over UI
   m_TagString: Untagged
@@ -3026,14 +3025,6 @@ Transform:
   m_Father: {fileID: 1687258585}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1069142661
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069142659}
-  m_Enabled: 1
 --- !u!20 &1069142662
 Camera:
   m_ObjectHideFlags: 0
