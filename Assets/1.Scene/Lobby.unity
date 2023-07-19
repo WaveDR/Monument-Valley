@@ -1742,8 +1742,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6473316396811422139}
         m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
-        m_MethodName: Set_UI
-        m_Mode: 6
+        m_MethodName: Game_Exit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2047,7 +2047,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6473316396811422139}
         m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
-        m_MethodName: Goto_Lobby
+        m_MethodName: Spawn_Lobby_UI
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2603,7 +2603,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6473316396811422139}
         m_TargetAssemblyTypeName: UI_Manager, Assembly-CSharp
-        m_MethodName: Goto_Lobby
+        m_MethodName: Spawn_Lobby_UI
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

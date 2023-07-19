@@ -86,6 +86,10 @@ public class UI_Manager : MonoBehaviour
             Invoke("Lobby_Scene", 0.5f);
     }
 
+    public void Game_Exit()
+    {
+        Application.Quit();
+    }
     void Restart_Scene()
     {
             SceneManager.LoadScene(cur_Scene.name);
