@@ -13,6 +13,7 @@ public class Login_Manager : MonoBehaviour
 
     public void Login_Event()
     {
+        Sound_Manager.Instance.PlaySE("Select_Level");
         if (input_ID.text.Equals(string.Empty) || input_Password.text.Equals(string.Empty))
         {
             status_Text.text = "ID 혹은 Password를 입력해주세요.";
@@ -36,6 +37,7 @@ public class Login_Manager : MonoBehaviour
     //회원가입도 만들것
     public void Sign_Up()
     {
+        Sound_Manager.Instance.PlaySE("Select_Level");
 
         if (input_ID.text.Equals(string.Empty) || input_Password.text.Equals(string.Empty))
         {
@@ -47,6 +49,7 @@ public class Login_Manager : MonoBehaviour
             //회원가입 성공
             SQL_Manager.Instance.Sign_Up(input_ID.text, input_Password.text);
             User_Info info = SQL_Manager.Instance.info;
+            status_Text.text = "- 회원정보가 등록되었습니다 -";
             Debug.Log(info.u_Name + " | " + info.u_Password);
 
   
@@ -66,7 +69,7 @@ public class Login_Manager : MonoBehaviour
         {
             info_Pages[1].SetActive(false);
             info_Pages[0].SetActive(true);
-            status_Text.text = "Login";
+
         }
         input_ID.text = null;
         input_Password.text = null;

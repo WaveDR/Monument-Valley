@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ERotate { RotX,RotY,RotZ}
+public enum ERotate { RotX, RotY, RotZ }
 public class Rotate_Object : MonoBehaviour
 {
     public ERotate rotate_Type;
@@ -20,6 +20,8 @@ public class Rotate_Object : MonoBehaviour
 
     private bool isCurrect;
     public bool isControl = true;
+
+    private bool _isStop;
     public Animator rotator_Anim;
 
     public GameObject light_Object;
@@ -40,8 +42,9 @@ public class Rotate_Object : MonoBehaviour
     void Update()
     {
         if (!isControl) return;
-        if (isRotate) 
+        if (isRotate)
         {
+            _isStop = false;
             offset = (Input.mousePosition - mousePos);
             isCurrect = false;
 
@@ -62,13 +65,45 @@ public class Rotate_Object : MonoBehaviour
 
             mousePos = Input.mousePosition;
         }
-        
+
 
         else
         {
-            if(!isCurrect)
-            Auto_Rotate_Euler();
+            if (!isCurrect)
+                Auto_Rotate_Euler();
+
+            if (!_isStop)
+            {
+                Sound_Manager.Instance.StopAll_SFX();
+                int num = Random.Range(0, 4);
+                switch (num)
+                {
+                    case 0:
+
+                        Sound_Manager.Instance.PlaySE("Rotator_01");
+
+                        break;
+                    case 1:
+
+                        Sound_Manager.Instance.PlaySE("Rotator_02");
+
+                        break;
+                    case 2:
+
+                        Sound_Manager.Instance.PlaySE("Rotator_03");
+
+                        break;
+                    case 3:
+
+                        Sound_Manager.Instance.PlaySE("Rotator_04");
+
+                        break;
+                }
+                _isStop = true;
+            }
         }
+
+
     }
 
     private void OnMouseDown()
@@ -130,16 +165,16 @@ public class Rotate_Object : MonoBehaviour
 
     void Auto_Euler(float start, float end)
     {
-        
-        if ((int)transform.localRotation.x != (int)end) 
+
+        if ((int)transform.localRotation.x != (int)end)
             transform.localEulerAngles = new Vector3(start + Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
         else
         {
             transform.localEulerAngles = new Vector3(start - Time.deltaTime * rotate_Speed, transform.localRotation.eulerAngles.y, transform.localRotation.eulerAngles.z);
-     
+
         }
 
-        if(transform.localEulerAngles.x >= end - 0.3f && transform.localEulerAngles.x <= end + 0.3f) isCurrect = true;
+        if (transform.localEulerAngles.x >= end - 0.3f && transform.localEulerAngles.x <= end + 0.3f) isCurrect = true;
 
     }
 }

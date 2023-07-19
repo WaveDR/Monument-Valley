@@ -66,6 +66,8 @@ public class NodeManager : MonoBehaviour
                 if (node == null) return;
                 if (node.isTarget_Node == true)
                 {
+                    Sound_Manager.Instance.StopAll_SFX();
+                    Sound_Manager.Instance.PlaySE("Move_Point");
                     isRay = false;
                     node.isEnd = true;
                     node.click_Pos.Play();
