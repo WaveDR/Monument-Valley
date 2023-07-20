@@ -107,11 +107,11 @@ public class Node : MonoBehaviour
     public void Raycast_Node(float rayDeg, float rayLength, bool reverce)
     { 
         //북 동 남 서 방향으로 Raycast를 발사하여 다음 인식 경로를 확인 (교차로에서 검출된 막다른 길 경로 isDont_Able 이나 이미 지나온 isPastNode는 제외하여 확인)
-        if ((Physics.Raycast(transform.position+ (  transform.forward * rayDeg) ,  transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (  transform.right   * rayDeg) ,  transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg) , -transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (- transform.right   * rayDeg) , -transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position,  transform.up, out rayHit, range * rayLength, LayerMask.GetMask("Node"))  && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able)))
+        if ((Physics.Raycast(transform.position+ (  transform.forward * rayDeg) ,  transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position+ (  transform.right   * rayDeg) ,  transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg) , -transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position+ (- transform.right   * rayDeg) , -transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position, Ray_Euler(1, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit)))
         {
             isTarget_Node = true; 
             isPast_Node = true; //이미 지나온 길로 다음 Node에서 이전 Node를 확인하지 않도록 수정
@@ -165,7 +165,7 @@ public class Node : MonoBehaviour
          || (Physics.Raycast(transform.position + (-transform.right   * rayDeg), -transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
          || (Physics.Raycast(transform.position + ( transform.forward * rayDeg),  transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
          || (Physics.Raycast(transform.position + ( transform.right   * rayDeg),  transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
-         || (Physics.Raycast(transform.position, transform.up, out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit)))
+         || (Physics.Raycast(transform.position, Ray_Euler(1, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit)))
         {
             isTarget_Node = true;
             isPast_Node = true; //이미 지나온 길로 다음 Node에서 이전 Node를 확인하지 않도록 수정
@@ -243,7 +243,7 @@ public class Node : MonoBehaviour
         Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
         Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
         Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position, transform.up * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position, Ray_Euler(1, reverce) * range * rayLength, Color.green);
     }
 
 
