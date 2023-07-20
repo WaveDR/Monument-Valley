@@ -13,17 +13,21 @@ public class Sound
 
 public class Sound_Manager : MonoBehaviour
 {
-
     public static Sound_Manager Instance =null;
 
+    [Header("Sound Source")]
+    [Header("=======================================")]
     public AudioSource[] audioSource_Effects;
     public AudioSource audioSound_Bgm;
 
+    [Header("Sound Class")]
+    [Header("=======================================")]
     public Sound[] effectSound;
     public Sound[] bgmSound;
 
+    [Header("Sound Name")]
+    [Header("=======================================")]
     public string[] play_SoundName;
-
 
 
     private void Awake()
@@ -40,7 +44,11 @@ public class Sound_Manager : MonoBehaviour
         Play_SB("BGM_Main");
     }
 
+    //==================================================== Basic Method / CallBack Method =======================================================
 
+
+    //======================================================= Play
+    //Sound Effect
     public void PlaySE(string _Name)
     {
         for (int i = 0; i < effectSound.Length; i++)
@@ -63,6 +71,8 @@ public class Sound_Manager : MonoBehaviour
         }
         Debug.Log(_Name + "사운드가 Manager에 등록되지 않았습니다");
     }
+
+    //Sound BGM
     public void Play_SB(string _Name)
     {
         for (int i = 0; i < bgmSound.Length; i++)
@@ -80,6 +90,9 @@ public class Sound_Manager : MonoBehaviour
         Debug.Log(_Name + "사운드가 Manager에 등록되지 않았습니다");
     }
 
+
+    //============================================================== Stop
+
     public void StopAll_SFX()
     {
         for (int i = 0; i < audioSource_Effects.Length; i++)
@@ -92,6 +105,8 @@ public class Sound_Manager : MonoBehaviour
     {
         audioSound_Bgm.Stop();
     }
+
+    //사운드 지정 멈춤
     public void Stop_SFX(string _Name)
     {
         for (int i = 0; i < audioSource_Effects.Length; i++)

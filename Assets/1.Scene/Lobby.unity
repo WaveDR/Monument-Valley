@@ -2601,10 +2601,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -3341,10 +3341,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -4460,7 +4460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe3f38da0a8f82d479c85f3a2294e7b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ui_Anim: {fileID: 0}
   title_Level_Text: {fileID: 4719958214926251315}
   title_Name_Text: {fileID: 4719958215661422744}
   title_Detail_Text: {fileID: 4719958214505574883}
@@ -4472,6 +4471,7 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: c9febd37dc2b4a348a26a5f9341bbb07, type: 2}
   bgm_Slider: {fileID: 2118046842}
   sfx_Slider: {fileID: 529049534}
+  ui_Anim: {fileID: 0}
 --- !u!222 &6490573754314826440
 CanvasRenderer:
   m_ObjectHideFlags: 0
