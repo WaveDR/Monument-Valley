@@ -1,5 +1,5 @@
 # Portpolio Monument Valley
-Unity3d를 이용한 Splatoon 개인 모작입니다.
+Unity3d를 이용한 Monument Valley 개인 모작입니다.
 
 
 ## Coding Convention
