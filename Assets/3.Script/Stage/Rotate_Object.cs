@@ -33,10 +33,6 @@ public class Rotate_Object : MonoBehaviour
     {
         child_Nodes = GetComponentsInChildren<Node>();
         TryGetComponent(out rotator_Anim);
-        foreach (Node nodes in child_Nodes)
-        {
-            nodes.rotate_Node = true;
-        }
     }
 
     void Update()

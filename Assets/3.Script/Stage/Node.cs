@@ -19,11 +19,15 @@ public class Node : MonoBehaviour
     [Header("Special Node")]
     [Header("=======================================")]
     public bool crossRoad;     // 교차로 Node
-    public bool rotate_Node;   // 회전 오브젝트 Node
     public bool stairs_Node;   // 계단 Node
     public bool ladder_Node;   // 사다리 Node
     public bool button_Node;   // 버튼 Node
     public bool goal_Node;     // 골 Node
+
+    [Header("Reverce Node")]
+    [Header("=======================================")]
+    public bool stairs_Node_Reverce;   // 계단 Node
+    public bool ladder_Node_Reverce;   // 사다리 Node
 
     [Header("Data Node")]
     [Header("=======================================")]
@@ -47,36 +51,66 @@ public class Node : MonoBehaviour
 
         //Draw Ray
         if (stairs_Node)
-            Test_DrawRay(1f, 5, ladder_Node);
+            Test_DrawRay(1f, 5, false);
+
+        else if (stairs_Node_Reverce)
+            Test_DrawRay(1f, 5, true);
+
         else if (ladder_Node)
-            Test_DrawRay(0, 5, ladder_Node);
+            Test_DrawRay(0, 5, false);
+
+        else if (ladder_Node_Reverce)
+            Test_DrawRay(0, 5, true);
+
         else
-            Test_DrawRay(0, 1, ladder_Node);
+            Test_DrawRay(0, 1, false);
 
         //BFS Start
         if (isNode)
         {
             if (stairs_Node)
-                Raycast_Node(1f, 5); //각도 확인 계단 Node는 Vector.up을 곱한 각도로 확인
+                Raycast_Node(1f, 5, false); //각도 확인 계단 Node는 Vector.up을 곱한 각도로 확인
+            else if (stairs_Node_Reverce)
+                Raycast_Node(1f, 5, true);
             else if (ladder_Node)
-                Raycast_Node(0f, 5f); //각도 확인 사다리 Node북동남서 [상]을 확인하기 위한 node Raycast 길이가 길다.
+                Raycast_Node(0f, 5f, false); //각도 확인 사다리 Node북동남서 [상]을 확인하기 위한 node Raycast 길이가 길다.
+            else if (ladder_Node_Reverce)
+                Raycast_Node(0f, 5f, true);
             else
-                Raycast_Node(0, 1); //기본적인 길찾기를 담당하는 Node 북동남서를 확인. 길이가 짧다.
+                Raycast_Node(0, 1, false); //기본적인 길찾기를 담당하는 Node 북동남서를 확인. 길이가 짧다.
 
             isNode = false; //이 오브젝트에서 길 찾기 종료
+        }
+    }
+
+    //특수효과 Node 애니메이션
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (button_Node)
+            {
+                stage_Anim.SetBool("Floor_Out", true);
+
+                if (stairs_Node) stage_Anim.SetBool("Ladder_On", true);
+            }
+            if (goal_Node)
+            {
+                NodeManager.Instance.Finish_Stage();
+            }
         }
     }
 
     //==================================================== Basic Method / CallBack Method =======================================================
 
     //레이캐스트로 북동남서 상하 연결하여 BFS 구현
-    public void Raycast_Node(float rayDeg, float rayLength)
+    public void Raycast_Node(float rayDeg, float rayLength, bool reverce)
     { 
         //북 동 남 서 방향으로 Raycast를 발사하여 다음 인식 경로를 확인 (교차로에서 검출된 막다른 길 경로 isDont_Able 이나 이미 지나온 isPastNode는 제외하여 확인)
-        if ((Physics.Raycast(transform.position+ (  transform.forward * rayDeg) ,  transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (  transform.right * rayDeg)   ,  transform.right   + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg) , -transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
-         || (Physics.Raycast(transform.position+ (- transform.right * rayDeg)   , -transform.right   + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+        if ((Physics.Raycast(transform.position+ (  transform.forward * rayDeg) ,  transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (  transform.right   * rayDeg) ,  transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (- transform.forward * rayDeg) , -transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
+         || (Physics.Raycast(transform.position+ (- transform.right   * rayDeg) , -transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able))
          || (Physics.Raycast(transform.position,  transform.up, out rayHit, range * rayLength, LayerMask.GetMask("Node"))  && (!rayHit.collider.GetComponent<Node>().isPast_Node && !rayHit.collider.GetComponent<Node>().isDont_Able)))
         {
             isTarget_Node = true; 
@@ -110,7 +144,7 @@ public class Node : MonoBehaviour
             {
                 Debug.Log("더 이상 길이 없습니다!" + gameObject.name);
                 NodeManager.Instance.targetList.Clear();
-                NodeManager.Instance.start_Node.Reverce_Raycast_Node(rayDeg, rayLength);
+                NodeManager.Instance.start_Node.Reverce_Raycast_Node(rayDeg, rayLength, reverce);
                 return;
             }
 
@@ -122,26 +156,15 @@ public class Node : MonoBehaviour
             NodeManager.Instance.Delete_Node_Index();
         }
     }
-    public bool Node_Except(RaycastHit hit)
-    {
-        //현재 위치가 불가자리일때
-        if (!hit.collider.GetComponent<Node>().isPast_Node && !hit.collider.GetComponent<Node>().isDont_Able) 
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+ 
     //목표지점이 보이지 않는다면 시작지점에서 반대방향으로 확인
-    public void Reverce_Raycast_Node(float rayDeg, float rayLength)
+    public void Reverce_Raycast_Node(float rayDeg, float rayLength, bool reverce)
     {
         //남 동 북 서 방향으로 Raycast를 발사하여 다음 인식 경로를 확인 (교차로에서 검출된 막다른 길 경로 isDont_Able 이나 이미 지나온 isPastNode는 제외하여 확인)
-        if ((Physics.Raycast(transform.position + (-transform.forward * rayDeg), -transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
-         || (Physics.Raycast(transform.position + (-transform.right * rayDeg), -transform.right + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
-         || (Physics.Raycast(transform.position + (transform.forward * rayDeg), transform.forward + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
-         || (Physics.Raycast(transform.position + (transform.right * rayDeg), transform.right + (Vector3.up * rayDeg), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+        if ((Physics.Raycast(transform.position + (-transform.forward * rayDeg), -transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position + (-transform.right   * rayDeg), -transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position + ( transform.forward * rayDeg),  transform.forward + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
+         || (Physics.Raycast(transform.position + ( transform.right   * rayDeg),  transform.right   + Ray_Euler(rayDeg, reverce), out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit))
          || (Physics.Raycast(transform.position, transform.up, out rayHit, range * rayLength, LayerMask.GetMask("Node")) && Node_Except(rayHit)))
         {
             isTarget_Node = true;
@@ -185,32 +208,44 @@ public class Node : MonoBehaviour
             NodeManager.Instance.Delete_Node_Index();
         }
     }
-    //기즈모용 Draw Ray
-    void Test_DrawRay(float rayDeg , float rayLength , bool ladder)
+
+    #region BFS Route Data
+    public bool Node_Except(RaycastHit hit)
     {
-        Debug.DrawRay(transform.position + ( transform.forward * rayDeg), (transform.forward + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + (Vector3.up * rayDeg)) * range * rayLength, Color.green);
+        //Node 제외 조건 찹조 
+        if (!hit.collider.GetComponent<Node>().isPast_Node && !hit.collider.GetComponent<Node>().isDont_Able)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public Vector3 Ray_Euler(float rayDeg, bool reverce)
+    {
+        if (!reverce)
+        {
+            return Vector3.up * rayDeg;
+        }
+        else
+        {
+            return Vector3.down * rayDeg;
+        }
+    }
+
+    #endregion
+
+    //기즈모용 Draw Ray
+    void Test_DrawRay(float rayDeg , float rayLength , bool reverce)
+    {
+        Debug.DrawRay(transform.position + ( transform.forward * rayDeg), (transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+        Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
         Debug.DrawRay(transform.position, transform.up * range * rayLength, Color.green);
     }
 
 
-    //특수효과 Node 애니메이션
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            if (button_Node)
-            {
-                stage_Anim.SetBool("Floor_Out", true);
 
-                if(stairs_Node) stage_Anim.SetBool("Ladder_On", true);
-            }
-            if (goal_Node)
-            {
-                NodeManager.Instance.Finish_Stage();
-            }
-        }
-    }
 }

@@ -109,7 +109,7 @@ public class NodeManager : MonoBehaviour
             // all_Node List에서 교차로 bool값이 확인되면 제거를 멈추고 길찾기를 리셋
             // 처음부터 다시 길을 찾되 isDont_Able || isPast_Node를 제외한 길을 찾는다.
 
-            if (targetList[targetList.Count -1].crossRoad) 
+            if (targetList[targetList.Count -1].crossRoad || targetList[targetList.Count - 1].isStart) 
             {
                 Debug.Log("Cross 읽기 후");
                 foreach (Node nodes in all_Nodes)
@@ -120,7 +120,7 @@ public class NodeManager : MonoBehaviour
                 isRay = false; //Restart
                 return;
             }
-            else if(!targetList[targetList.Count - 1].isStart)
+            else
             {
                 targetList[targetList.Count - 1].isDont_Able = true; //끝자락부터 길 재확인 중 isDont_Able이 true인 node는 계산에서 제외
                 targetList.RemoveAt(targetList.Count - 1); //마지막에서 한 칸씩 제거
