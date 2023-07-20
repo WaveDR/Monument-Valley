@@ -92,7 +92,8 @@ public class NodeManager : MonoBehaviour
             nodes.isDont_Able = false;
             nodes.isStart = false;
             nodes.isEnd = false;
-           
+
+            if (nodes.crossRoad) nodes.isCross = true; //crossRoad가 활성화되어있는 Node는 활성화하여 교차로 역할 부여
         }
         end_Node = null;
         isRayEnd = false;
@@ -104,18 +105,16 @@ public class NodeManager : MonoBehaviour
         player.Start_Node_Select();
         while (true)
         {
-            Debug.Log("Cross 읽기 전");
-
             // all_Node List에서 교차로 bool값이 확인되면 제거를 멈추고 길찾기를 리셋
             // 처음부터 다시 길을 찾되 isDont_Able || isPast_Node를 제외한 길을 찾는다.
 
-            if (targetList[targetList.Count -1].crossRoad || targetList[targetList.Count - 1].isStart) 
+            if (targetList[targetList.Count -1].isCross || targetList[targetList.Count - 1].isStart)
             {
-                Debug.Log("Cross 읽기 후");
                 foreach (Node nodes in all_Nodes)
                 {
                     nodes.isPast_Node = false;
                 }
+                targetList[targetList.Count - 1].isCross = false; // isCross를 비활성화하여 3단계, 2단계, 1단계 교차로를 순서대로 확인
                 targetList.Clear(); //초기화하여 다시 찾기
                 isRay = false; //Restart
                 return;
