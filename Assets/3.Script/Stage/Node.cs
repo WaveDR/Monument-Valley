@@ -49,22 +49,6 @@ public class Node : MonoBehaviour
 
     void Update()
     {
-        //Draw Ray
-        if (stairs_Node)
-            Test_DrawRay(1f, 5, false);
-
-        else if (stairs_Node_Reverce)
-            Test_DrawRay(0.8f, 5, true);
-
-        else if (ladder_Node)
-            Test_DrawRay(0, 4, false);
-
-        else if (ladder_Node_Reverce)
-            Test_DrawRay(0, 4, true);
-
-        else
-            Test_DrawRay(0, 1, false);
-
         //BFS Start
         if (isNode)
         {
@@ -238,12 +222,12 @@ public class Node : MonoBehaviour
     #endregion
 
     //기즈모용 Draw Ray
-    void Test_DrawRay(float rayDeg , float rayLength , bool reverce)
-    {
-        Debug.DrawRay(transform.position + ( transform.forward * rayDeg), (transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
-        Debug.DrawRay(transform.position, Ray_Euler(1, reverce) * range * rayLength, Color.green);
-    }
+    //void Test_DrawRay(float rayDeg , float rayLength , bool reverce)
+    //{
+    //    Debug.DrawRay(transform.position + ( transform.forward * rayDeg), (transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+    //    Debug.DrawRay(transform.position + (- transform.forward * rayDeg), (-transform.forward + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+    //    Debug.DrawRay(transform.position + ( transform.right * rayDeg), (transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+    //    Debug.DrawRay(transform.position + ( - transform.right * rayDeg), (-transform.right + Ray_Euler(rayDeg, reverce)) * range * rayLength, Color.green);
+    //    Debug.DrawRay(transform.position, Ray_Euler(1, reverce) * range * rayLength, Color.green);
+    //}
 }
