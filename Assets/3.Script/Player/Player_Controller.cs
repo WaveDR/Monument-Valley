@@ -21,6 +21,8 @@ public class Player_Controller : MonoBehaviour
     [Header("=======================================")]
     public GameObject node_Obj;
 
+
+    //사다리 탈 시 회전 버그 수정 및 켜질 때 애니메이션 or UI 추가하기 (내일)
     private void Awake()
     {
         TryGetComponent(out player_Anim);
@@ -67,16 +69,6 @@ public class Player_Controller : MonoBehaviour
             else
             {
                 Start_Node_Select();
-            }
-
-            //캐릭터를 y만 회전하도록 고정
-            if (node.stairs_Node)
-            {
-                transform.localRotation = Quaternion.Euler(Vector3.zero);
-            }
-            else
-            {
-                transform.localRotation = Quaternion.Euler(Vector3.zero);
             }
         }
 
@@ -126,22 +118,24 @@ public class Player_Controller : MonoBehaviour
     {
         //캐릭터 회전
         transform.LookAt(move_Tatget_Queue.Peek().transform.position);
-        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0));
+        transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0)); //플레이어 회전축을 y만 움직이게 고정
 
         //다음 Queue로 캐릭터 위치 변경
         transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
-        //현재 queue가 사다리일 경우 애니메이션 변경
-        if (move_Tatget_Queue.Peek().ladder_Node)
-            player_Anim.SetBool("isLadder", true);
-        else
-            player_Anim.SetBool("isLadder", false);
 
         //목표 지점 도착 시 다음 Queue 갱신
         if (transform.position == move_Tatget_Queue.Peek().transform.position)
         {
+            //현재 queue가 사다리일 경우 애니메이션 변경
+            if (move_Tatget_Queue.Peek().ladder_Node)
+                player_Anim.SetBool("isLadder", true);
+
+            if (!move_Tatget_Queue.Peek().ladder_Node)
+                player_Anim.SetBool("isLadder", false);
             move_Tatget_Queue.Dequeue();
         }
+
 
         //잔여 목표 queue가 남지 않을 경우 애니메이션 변경 후 return;
         if (move_Tatget_Queue.Count == 0)

@@ -49,7 +49,6 @@ public class Node : MonoBehaviour
 
     void Update()
     {
-
         //Draw Ray
         if (stairs_Node)
             Test_DrawRay(1f, 5, false);

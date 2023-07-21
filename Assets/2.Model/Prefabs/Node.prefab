@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6226757206293301662}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -102,11 +102,14 @@ MonoBehaviour:
   isPast_Node: 0
   isDont_Able: 0
   isNode: 0
+  isCross: 0
   crossRoad: 0
-  rotate_Node: 0
   stairs_Node: 0
   ladder_Node: 0
   button_Node: 0
+  goal_Node: 0
+  stairs_Node_Reverce: 0
+  ladder_Node_Reverce: 0
   neighbor_Node: {fileID: 0}
   range: 0
   stage_Anim_Num: 0
