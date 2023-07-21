@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 public class Player_Controller : MonoBehaviour
 {
@@ -10,12 +9,11 @@ public class Player_Controller : MonoBehaviour
     public Animator player_Anim;
     public float move_Speed;
     public bool isMove = false;
-
+    private bool _isCurve;
 
     [Header("Target Node")]
     [Header("=======================================")]
     public Queue<Node> move_Tatget_Queue = new Queue<Node>();
-    public List<Node> move_Target_List = new List<Node>();
 
     [Header("Current Node")]
     [Header("=======================================")]
@@ -31,7 +29,6 @@ public class Player_Controller : MonoBehaviour
 
     void Update()
     {
-        move_Target_List = move_Tatget_Queue.ToList();
 
         if (!isMove)
         {
@@ -116,24 +113,29 @@ public class Player_Controller : MonoBehaviour
 
     public void Player_Move()
     {
-        //캐릭터 회전
         transform.LookAt(move_Tatget_Queue.Peek().transform.position);
         transform.rotation = Quaternion.Euler(new Vector3(0, transform.eulerAngles.y, 0)); //플레이어 회전축을 y만 움직이게 고정
 
         //다음 Queue로 캐릭터 위치 변경
         transform.position = Vector3.MoveTowards(transform.position, move_Tatget_Queue.Peek().transform.position, move_Speed * Time.deltaTime);
 
-
         //목표 지점 도착 시 다음 Queue 갱신
         if (transform.position == move_Tatget_Queue.Peek().transform.position)
         {
             //현재 queue가 사다리일 경우 애니메이션 변경
-            if (move_Tatget_Queue.Peek().ladder_Node)
-                player_Anim.SetBool("isLadder", true);
 
-            if (!move_Tatget_Queue.Peek().ladder_Node)
+            if (move_Tatget_Queue.Peek().ladder_Node || move_Tatget_Queue.Peek().ladder_Node_Reverce)
+            {
+                player_Anim.SetBool("isLadder", true);
+            }
+
+            if (!move_Tatget_Queue.Peek().ladder_Node && !move_Tatget_Queue.Peek().ladder_Node_Reverce)
+            {
                 player_Anim.SetBool("isLadder", false);
+            }
+               
             move_Tatget_Queue.Dequeue();
+
         }
 
 
