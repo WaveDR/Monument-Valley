@@ -3,15 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Node
+  - FirstNode
+  - Rotator
+  - Fillor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Node
   - Water
   - UI
-  - 
+  - Over_Ui
   - 
   - 
   - 
